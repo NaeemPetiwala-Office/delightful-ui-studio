@@ -102,25 +102,25 @@ export function TimelineModal({ isOpen, onClose, logId, entries }: TimelineModal
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-4 md:inset-8 lg:inset-16 bg-card rounded-2xl shadow-xl border border-border z-50 flex flex-col overflow-hidden"
+            className="fixed inset-2 sm:inset-4 md:inset-8 lg:inset-16 bg-card rounded-xl sm:rounded-2xl shadow-xl border border-border z-50 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-muted/30">
-              <div className="flex items-center gap-3">
-                <h2 className="text-lg font-semibold text-foreground">Request Timeline</h2>
-                <Badge variant="secondary" className="font-mono text-xs">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-muted/30">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <h2 className="text-base sm:text-lg font-semibold text-foreground truncate">Request Timeline</h2>
+                <Badge variant="secondary" className="font-mono text-xs flex-shrink-0">
                   {entries.length} logs
                 </Badge>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                 <Button
                   variant="default"
                   size="sm"
                   onClick={handleDownload}
-                  className="gap-2"
+                  className="gap-1.5 sm:gap-2 h-8 px-2 sm:px-3 text-xs sm:text-sm"
                 >
-                  <Download className="w-4 h-4" />
-                  Download
+                  <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">Download</span>
                 </Button>
                 <Button
                   variant="ghost"
@@ -134,8 +134,8 @@ export function TimelineModal({ isOpen, onClose, logId, entries }: TimelineModal
             </div>
 
             {/* Content */}
-            <ScrollArea className="flex-1 p-6">
-              <div className="space-y-6">
+            <ScrollArea className="flex-1 p-4 sm:p-6">
+              <div className="space-y-4 sm:space-y-6">
                 {entries.map((entry, index) => (
                   <motion.div
                     key={entry.id}
@@ -146,30 +146,30 @@ export function TimelineModal({ isOpen, onClose, logId, entries }: TimelineModal
                   >
                     {/* Timeline line */}
                     {index < entries.length - 1 && (
-                      <div className="absolute left-[7px] top-8 bottom-0 w-0.5 bg-border -mb-6" />
+                      <div className="absolute left-[7px] top-8 bottom-0 w-0.5 bg-border -mb-4 sm:-mb-6" />
                     )}
 
                     {/* Entry */}
-                    <div className="flex gap-4">
+                    <div className="flex gap-3 sm:gap-4">
                       {/* Timeline dot */}
-                      <div className="flex-shrink-0 w-4 h-4 rounded-full bg-primary mt-1.5 ring-4 ring-background" />
+                      <div className="flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-primary mt-1.5 ring-2 sm:ring-4 ring-background" />
 
                       <div className="flex-1 min-w-0">
                         {/* Header */}
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="text-sm font-medium text-foreground">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                          <span className="text-xs sm:text-sm font-medium text-foreground">
                             {entry.timestamp}
                           </span>
-                          <Badge variant="outline" className="bg-info/10 text-info border-info/20">
+                          <Badge variant="outline" className="bg-info/10 text-info border-info/20 text-xs">
                             Api
                           </Badge>
-                          <span className="text-sm text-muted-foreground font-mono truncate">
-                            {entry.apiEndpoint}
-                          </span>
                         </div>
+                        <p className="text-xs sm:text-sm text-muted-foreground font-mono truncate mb-3">
+                          {entry.apiEndpoint}
+                        </p>
 
                         {/* Request & Response */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                           <JsonBlock data={entry.requestData} label="Request Data" />
                           <JsonBlock data={entry.responseData} label="Response" />
                         </div>
