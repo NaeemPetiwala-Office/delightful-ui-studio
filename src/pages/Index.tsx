@@ -94,11 +94,13 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = (filters: FilterValues) => {
     console.log("Searching with filters:", filters);
     // In a real app, you would fetch data based on filters
     setLogs(sampleLogs);
+    setHasSearched(true);
   };
 
   const handleViewTimeline = (log: LogEntry) => {
@@ -137,12 +139,14 @@ const Index = () => {
           />
         </main>
 
-        {/* Made by Naeem Badge */}
-        <div className="fixed bottom-4 right-4 z-40">
-          <div className="px-4 py-2 rounded-lg bg-sidebar/90 backdrop-blur-sm border border-sidebar-border text-sidebar-foreground/80 text-sm font-medium shadow-lg">
-            Made by Naeem
+        {/* Made by Naeem Badge - Only visible after search */}
+        {hasSearched && (
+          <div className="fixed bottom-4 right-4 z-40">
+            <div className="px-4 py-2 rounded-lg bg-sidebar/90 backdrop-blur-sm border border-sidebar-border text-sidebar-foreground/80 text-sm font-medium shadow-lg">
+              Made by Naeem
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Timeline Modal */}

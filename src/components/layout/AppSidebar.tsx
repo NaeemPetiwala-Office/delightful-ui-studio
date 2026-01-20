@@ -1,11 +1,10 @@
-import { Home, FileText, Settings, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { FileText, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { title: "Dashboard", icon: Home, href: "/" },
-  { title: "Native Log", icon: FileText, href: "/", active: true },
-  { title: "Settings", icon: Settings, href: "/" },
+  { title: "New Logs", icon: FileText, href: "/", active: true },
+  { title: "Old Logs", icon: FileText, href: "/" },
 ];
 
 interface AppSidebarProps {
