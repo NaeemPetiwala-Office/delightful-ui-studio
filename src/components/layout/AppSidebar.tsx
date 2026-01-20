@@ -36,13 +36,17 @@ export function AppSidebar({ isOpen, onClose, collapsed, onToggleCollapse }: App
         initial={false}
         animate={{ 
           width: collapsed ? 72 : 240,
-          x: 0
         }}
         className={cn(
-          "h-screen bg-sidebar flex flex-col border-r border-sidebar-border z-50",
-          "fixed lg:relative",
-          "transition-transform lg:transition-none",
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          "h-screen bg-sidebar flex flex-col border-r border-sidebar-border",
+          // Mobile: fixed overlay that slides in
+          "fixed inset-y-0 left-0 z-50",
+          // Desktop: relative positioning
+          "lg:relative lg:z-auto",
+          // Hidden on mobile by default, shown when isOpen is true
+          isOpen ? "translate-x-0" : "-translate-x-full",
+          // Always visible on desktop
+          "lg:translate-x-0"
         )}
       >
         {/* Logo Section */}
