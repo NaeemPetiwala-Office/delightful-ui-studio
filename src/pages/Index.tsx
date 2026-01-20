@@ -92,6 +92,8 @@ const Index = () => {
   const [selectedLog, setSelectedLog] = useState<LogEntry | null>(null);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleSearch = (filters: FilterValues) => {
     console.log("Searching with filters:", filters);
@@ -107,13 +109,21 @@ const Index = () => {
   return (
     <div className="flex min-h-screen w-full bg-background">
       {/* Sidebar */}
-      <AppSidebar />
+      <AppSidebar 
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <Header title="Native Log" />
+        <Header 
+          title="Native Log" 
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
-        <main className="flex-1 p-6 space-y-6 overflow-auto scrollbar-thin">
+        <main className="flex-1 p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6 overflow-auto scrollbar-thin">
           {/* Filter Panel */}
           <FilterPanel onSearch={handleSearch} />
 

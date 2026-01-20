@@ -63,12 +63,12 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-card rounded-xl border border-border p-6 shadow-sm"
+      className="bg-card rounded-xl border border-border p-4 sm:p-6 shadow-sm"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
         {/* Client ID */}
-        <div className="space-y-2">
-          <Label htmlFor="clientId" className="text-sm font-medium text-foreground">
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label htmlFor="clientId" className="text-xs sm:text-sm font-medium text-foreground">
             Client ID <span className="text-destructive">*</span>
           </Label>
           <Input
@@ -76,13 +76,13 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
             placeholder="Enter Client ID"
             value={filters.clientId}
             onChange={(e) => setFilters({ ...filters, clientId: e.target.value })}
-            className="h-10"
+            className="h-9 sm:h-10 text-sm"
           />
         </div>
 
         {/* Repcode */}
-        <div className="space-y-2">
-          <Label htmlFor="repcode" className="text-sm font-medium text-foreground">
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label htmlFor="repcode" className="text-xs sm:text-sm font-medium text-foreground">
             Repcode <span className="text-destructive">*</span>
           </Label>
           <Input
@@ -90,20 +90,20 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
             placeholder="Enter Repcode"
             value={filters.repcode}
             onChange={(e) => setFilters({ ...filters, repcode: e.target.value })}
-            className="h-10"
+            className="h-9 sm:h-10 text-sm"
           />
         </div>
 
         {/* Type */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium text-foreground">
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label className="text-xs sm:text-sm font-medium text-foreground">
             Type <span className="text-destructive">*</span>
           </Label>
           <Select
             value={filters.type}
             onValueChange={(value) => setFilters({ ...filters, type: value })}
           >
-            <SelectTrigger className="h-10">
+            <SelectTrigger className="h-9 sm:h-10 text-sm">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -117,8 +117,8 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
         </div>
 
         {/* Date */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium text-foreground">
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label className="text-xs sm:text-sm font-medium text-foreground">
             Date <span className="text-destructive">*</span>
           </Label>
           <Popover>
@@ -126,12 +126,14 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
               <Button
                 variant="outline"
                 className={cn(
-                  "w-full h-10 justify-start text-left font-normal",
+                  "w-full h-9 sm:h-10 justify-start text-left font-normal text-sm",
                   !filters.date && "text-muted-foreground"
                 )}
               >
-                <Calendar className="mr-2 h-4 w-4" />
-                {filters.date ? format(filters.date, "dd-MM-yyyy") : "Select date"}
+                <Calendar className="mr-2 h-4 w-4 flex-shrink-0" />
+                <span className="truncate">
+                  {filters.date ? format(filters.date, "dd-MM-yyyy") : "Select date"}
+                </span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -147,13 +149,13 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
         </div>
 
         {/* Module Type */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium text-foreground">Module Type</Label>
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label className="text-xs sm:text-sm font-medium text-foreground">Module Type</Label>
           <Select
             value={filters.moduleType}
             onValueChange={(value) => setFilters({ ...filters, moduleType: value })}
           >
-            <SelectTrigger className="h-10">
+            <SelectTrigger className="h-9 sm:h-10 text-sm">
               <SelectValue placeholder="Select module" />
             </SelectTrigger>
             <SelectContent>
@@ -168,10 +170,10 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
       </div>
 
       {/* Search Button */}
-      <div className="mt-6 flex justify-start">
+      <div className="mt-4 sm:mt-6 flex justify-start">
         <Button
           onClick={handleSearch}
-          className="px-8 h-10 font-medium"
+          className="w-full sm:w-auto px-6 sm:px-8 h-9 sm:h-10 font-medium text-sm"
         >
           <Search className="w-4 h-4 mr-2" />
           Show Results
