@@ -129,14 +129,16 @@ const Index = () => {
           {/* Filter Panel */}
           <FilterPanel onSearch={handleSearch} />
 
-          {/* Log Table */}
-          <LogTable
-            logs={logs}
-            onViewTimeline={handleViewTimeline}
-            currentPage={currentPage}
-            totalPages={5}
-            onPageChange={setCurrentPage}
-          />
+          {/* Log Table - Only visible after search */}
+          {hasSearched && (
+            <LogTable
+              logs={logs}
+              onViewTimeline={handleViewTimeline}
+              currentPage={currentPage}
+              totalPages={5}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </main>
 
         {/* Made by Naeem Badge - Only visible after search */}
