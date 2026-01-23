@@ -110,6 +110,26 @@ const OldLogs = () => {
   const handlePrevDay = () => setDate(subDays(date, 1));
   const handleNextDay = () => setDate(addDays(date, 1));
 
+  const handlePrevClient = () => {
+    const currentIndex = clients.findIndex(c => c.id === clientId);
+    if (currentIndex > 0) {
+      setClientId(clients[currentIndex - 1].id);
+    } else if (currentIndex === -1 && clients.length > 0) {
+      setClientId(clients[clients.length - 1].id);
+    } else {
+      setClientId(clients[clients.length - 1].id);
+    }
+  };
+
+  const handleNextClient = () => {
+    const currentIndex = clients.findIndex(c => c.id === clientId);
+    if (currentIndex < clients.length - 1) {
+      setClientId(clients[currentIndex + 1].id);
+    } else {
+      setClientId(clients[0].id);
+    }
+  };
+
   const handleActionClick = (action: string) => {
     console.log(`Action clicked: ${action}`);
   };
@@ -160,14 +180,18 @@ const OldLogs = () => {
                 <Button
                   variant="outline"
                   size="icon"
+                  onClick={handlePrevClient}
                   className="h-11 w-11 border-primary/30"
+                  title="Previous Client"
                 >
                   <ChevronUp className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
+                  onClick={handleNextClient}
                   className="h-11 w-11 border-primary/30"
+                  title="Next Client"
                 >
                   <ChevronDown className="h-4 w-4" />
                 </Button>
