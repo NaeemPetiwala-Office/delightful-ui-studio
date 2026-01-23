@@ -1,10 +1,11 @@
-import { FileText, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { FileText, ChevronLeft, ChevronRight, X, Archive } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { title: "New Logs", icon: FileText, href: "/", active: true },
-  { title: "Old Logs", icon: FileText, href: "/" },
+  { title: "New Logs", icon: FileText, href: "/" },
+  { title: "Old Logs", icon: Archive, href: "/old-logs" },
 ];
 
 interface AppSidebarProps {
@@ -15,6 +16,7 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ isOpen, onClose, collapsed, onToggleCollapse }: AppSidebarProps) {
+  const location = useLocation();
   return (
     <>
       {/* Mobile Overlay */}
@@ -81,39 +83,42 @@ export function AppSidebar({ isOpen, onClose, collapsed, onToggleCollapse }: App
 
         {/* Navigation */}
         <nav className="flex-1 p-3 space-y-1">
-          {navItems.map((item) => (
-            <a
-              key={item.title}
-              href={item.href}
-              onClick={onClose}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
-                "hover:bg-sidebar-accent group",
-                item.active
-                  ? "bg-sidebar-accent text-sidebar-primary"
-                  : "text-sidebar-foreground"
-              )}
-            >
-              <item.icon
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.href;
+            return (
+              <a
+                key={item.title}
+                href={item.href}
+                onClick={onClose}
                 className={cn(
-                  "w-5 h-5 flex-shrink-0",
-                  item.active ? "text-sidebar-primary" : "text-sidebar-foreground group-hover:text-sidebar-primary"
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
+                  "hover:bg-sidebar-accent group",
+                  isActive
+                    ? "bg-sidebar-accent text-sidebar-primary"
+                    : "text-sidebar-foreground"
                 )}
-              />
-              <AnimatePresence mode="wait">
-                {!collapsed && (
-                  <motion.span
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "auto" }}
-                    exit={{ opacity: 0, width: 0 }}
-                    className="font-medium text-sm whitespace-nowrap overflow-hidden"
-                  >
-                    {item.title}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </a>
-          ))}
+              >
+                <item.icon
+                  className={cn(
+                    "w-5 h-5 flex-shrink-0",
+                    isActive ? "text-sidebar-primary" : "text-sidebar-foreground group-hover:text-sidebar-primary"
+                  )}
+                />
+                <AnimatePresence mode="wait">
+                  {!collapsed && (
+                    <motion.span
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      className="font-medium text-sm whitespace-nowrap overflow-hidden"
+                    >
+                      {item.title}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </a>
+            );
+          })}
         </nav>
 
         {/* Collapse Button - Desktop Only */}
