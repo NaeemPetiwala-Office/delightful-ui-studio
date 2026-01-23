@@ -52,7 +52,7 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
     repcode: "",
     type: "",
     moduleType: "",
-    date: undefined,
+    date: new Date(),
   });
 
   const handleSearch = () => {
