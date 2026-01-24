@@ -78,6 +78,8 @@ const OldLogs = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [clientId, setClientId] = useState<string>("");
+  const [customClientId, setCustomClientId] = useState<string>("");
+  const [isCustomClientMode, setIsCustomClientMode] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
   const [repCode, setRepCode] = useState("");
   const [isLive, setIsLive] = useState(true);
@@ -131,6 +133,10 @@ const OldLogs = () => {
   };
 
   const handleActionClick = (action: string) => {
+    if (action === "Custom Client ID") {
+      setIsCustomClientMode(!isCustomClientMode);
+      return;
+    }
     console.log(`Action clicked: ${action}`);
   };
 
@@ -159,20 +165,29 @@ const OldLogs = () => {
               {/* Client ID */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Client ID
+                  Client ID {isCustomClientMode && "(Custom)"}
                 </label>
-                <Select value={clientId} onValueChange={setClientId}>
-                  <SelectTrigger className="w-full h-11 bg-card border-primary/30 focus:border-primary">
-                    <SelectValue placeholder="Select Client" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-80 bg-popover border-border">
-                    {clients.map((client) => (
-                      <SelectItem key={client.id} value={client.id}>
-                        {client.name} ({client.id})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {isCustomClientMode ? (
+                  <Input
+                    value={customClientId}
+                    onChange={(e) => setCustomClientId(e.target.value)}
+                    placeholder="Enter Custom Client ID"
+                    className="h-11 bg-card border-primary/30 focus:border-primary placeholder:text-primary/50"
+                  />
+                ) : (
+                  <Select value={clientId} onValueChange={setClientId}>
+                    <SelectTrigger className="w-full h-11 bg-card border-primary/30 focus:border-primary">
+                      <SelectValue placeholder="Select Client" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-80 bg-popover border-border">
+                      {clients.map((client) => (
+                        <SelectItem key={client.id} value={client.id}>
+                          {client.name} ({client.id})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
 
               {/* Sort Buttons */}
