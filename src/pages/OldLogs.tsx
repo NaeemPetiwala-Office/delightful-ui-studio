@@ -190,27 +190,29 @@ const OldLogs = () => {
                 )}
               </div>
 
-              {/* Sort Buttons */}
-              <div className="flex gap-1">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handlePrevClient}
-                  className="h-11 w-11 border-primary/30"
-                  title="Previous Client"
-                >
-                  <ChevronUp className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handleNextClient}
-                  className="h-11 w-11 border-primary/30"
-                  title="Next Client"
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </div>
+              {/* Sort Buttons - Only visible when dropdown mode is active */}
+              {!isCustomClientMode && (
+                <div className="flex gap-1">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handlePrevClient}
+                    className="h-11 w-11 border-primary/30"
+                    title="Previous Client"
+                  >
+                    <ChevronUp className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleNextClient}
+                    className="h-11 w-11 border-primary/30"
+                    title="Next Client"
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
 
               {/* Date Picker */}
               <div className="space-y-2">
