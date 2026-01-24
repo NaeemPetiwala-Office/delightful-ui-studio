@@ -321,12 +321,9 @@ const OldLogs = () => {
         </main>
 
         {/* Footer */}
-        <div className="flex justify-between items-center px-4 py-3">
+        <div className="flex justify-start items-center px-4 py-3">
           <div className="bg-primary/20 text-primary text-sm font-medium px-4 py-2 rounded-lg border border-primary/30">
             Version 3.0
-          </div>
-          <div className="bg-primary/20 text-primary text-sm font-medium px-4 py-2 rounded-lg border border-primary/30">
-            Made by Naeem
           </div>
         </div>
       </div>
