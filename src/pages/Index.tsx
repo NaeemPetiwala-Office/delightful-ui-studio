@@ -141,14 +141,6 @@ const Index = () => {
           )}
         </main>
 
-        {/* Made by Naeem Badge - Only visible after search */}
-        {hasSearched && (
-          <div className="fixed bottom-4 right-4 z-40">
-            <div className="px-4 py-2 rounded-lg bg-sidebar/90 backdrop-blur-sm border border-sidebar-border text-sidebar-foreground/80 text-sm font-medium shadow-lg">
-              Made by Naeem
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Timeline Modal */}
