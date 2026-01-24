@@ -64,9 +64,10 @@ const clients = [
 ];
 
 const environments = [
-  { id: "pre", name: "PRE ENV" },
-  { id: "local5", name: "LOCAL 5.0" },
-  { id: "storage", name: "STORAGE GP / QC ENV" },
+  { id: "live", name: "LIVE" },
+  { id: "pre", name: "PRE" },
+  { id: "local", name: "LOCAL" },
+  { id: "storage", name: "STORAGE GP / QC" },
 ];
 
 interface QuickAction {
@@ -82,8 +83,7 @@ const OldLogs = () => {
   const [isCustomClientMode, setIsCustomClientMode] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
   const [repCode, setRepCode] = useState("");
-  const [isLive, setIsLive] = useState(true);
-  const [environment, setEnvironment] = useState<string>("pre");
+  const [environment, setEnvironment] = useState<string>("live");
 
   const liveActions: QuickAction[] = [
     { label: "IOS CP3 LOGS", variant: "primary" },
@@ -107,7 +107,8 @@ const OldLogs = () => {
     { label: "Custom Client ID", variant: "primary" },
   ];
 
-  const quickActions = isLive ? liveActions : localActions;
+  const isLiveEnvironment = environment === "live";
+  const quickActions = isLiveEnvironment ? liveActions : localActions;
 
   const handlePrevDay = () => setDate(subDays(date, 1));
   const handleNextDay = () => setDate(addDays(date, 1));
@@ -277,35 +278,24 @@ const OldLogs = () => {
                 />
               </div>
 
-              {/* Live Toggle */}
-              <div className="flex items-center gap-2 h-11">
+              {/* Environment Dropdown */}
+              <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  LIVE
+                  Environment
                 </label>
-                <Checkbox
-                  checked={isLive}
-                  onCheckedChange={(checked) => setIsLive(checked as boolean)}
-                  className="h-5 w-5 border-primary data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                />
+                <Select value={environment} onValueChange={setEnvironment}>
+                  <SelectTrigger className="w-full h-11 bg-card border-primary/30 focus:border-primary">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border-border">
+                    {environments.map((env) => (
+                      <SelectItem key={env.id} value={env.id}>
+                        {env.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-
-              {/* Environment Dropdown - Only visible when not Live */}
-              {!isLive && (
-                <div className="w-48">
-                  <Select value={environment} onValueChange={setEnvironment}>
-                    <SelectTrigger className="w-full h-11 bg-card border-primary/30 focus:border-primary">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover border-border">
-                      {environments.map((env) => (
-                        <SelectItem key={env.id} value={env.id}>
-                          {env.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
             </div>
 
             {/* Quick Action Buttons */}
