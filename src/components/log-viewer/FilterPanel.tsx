@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { Search, Calendar, Loader2 } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Search, Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { addDays, subDays } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -119,8 +120,8 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
             id="clientId"
             placeholder="Enter Client ID"
             value={filters.clientId}
-            onChange={(e) => setFilters({ ...filters, clientId: e.target.value })}
-            className="h-9 sm:h-10 text-sm"
+            onChange={(e) => setFilters({ ...filters, clientId: e.target.value.toUpperCase() })}
+            className="h-9 sm:h-10 text-sm uppercase"
           />
         </div>
 
@@ -163,33 +164,62 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
         {/* Date */}
         <div className="space-y-1.5 sm:space-y-2">
           <Label className="text-xs sm:text-sm font-medium text-foreground">
-            Date <span className="text-destructive">*</span>
+            Date <span className="text-destructive">*</span> <span className="text-muted-foreground text-xs">(← →)</span>
           </Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full h-9 sm:h-10 justify-start text-left font-normal text-sm",
-                  !filters.date && "text-muted-foreground"
-                )}
-              >
-                <Calendar className="mr-2 h-4 w-4 flex-shrink-0" />
-                <span className="truncate">
-                  {filters.date ? format(filters.date, "dd-MM-yyyy") : "Select date"}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <CalendarComponent
-                mode="single"
-                selected={filters.date}
-                onSelect={(date) => setFilters({ ...filters, date })}
-                initialFocus
-                className="pointer-events-auto"
-              />
-            </PopoverContent>
-          </Popover>
+          <div className="flex gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => filters.date && setFilters({ ...filters, date: subDays(filters.date, 1) })}
+              className="h-9 sm:h-10 w-9 sm:w-10 flex-shrink-0"
+              title="Previous day (Left arrow)"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "flex-1 h-9 sm:h-10 justify-start text-left font-normal text-sm",
+                    !filters.date && "text-muted-foreground"
+                  )}
+                  onKeyDown={(e) => {
+                    if (e.key === "ArrowLeft" && filters.date) {
+                      e.preventDefault();
+                      setFilters({ ...filters, date: subDays(filters.date, 1) });
+                    } else if (e.key === "ArrowRight" && filters.date) {
+                      e.preventDefault();
+                      setFilters({ ...filters, date: addDays(filters.date, 1) });
+                    }
+                  }}
+                >
+                  <Calendar className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <span className="truncate">
+                    {filters.date ? format(filters.date, "dd-MM-yyyy") : "Select date"}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <CalendarComponent
+                  mode="single"
+                  selected={filters.date}
+                  onSelect={(date) => setFilters({ ...filters, date })}
+                  initialFocus
+                  className="pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => filters.date && setFilters({ ...filters, date: addDays(filters.date, 1) })}
+              className="h-9 sm:h-10 w-9 sm:w-10 flex-shrink-0"
+              title="Next day (Right arrow)"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
         {/* Module Type */}
