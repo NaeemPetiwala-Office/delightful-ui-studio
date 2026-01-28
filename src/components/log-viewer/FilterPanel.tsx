@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Search, Calendar, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Calendar, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,13 +39,6 @@ const typeOptions = [
   { value: "web_cp3", label: "Web CP3" },
 ];
 
-const moduleOptions = [
-  { value: "all", label: "All Modules" },
-  { value: "reporting", label: "Reporting" },
-  { value: "notification", label: "Notification" },
-  { value: "auth", label: "Authentication" },
-];
-
 export function FilterPanel({ onSearch }: FilterPanelProps) {
   const [filters, setFilters] = useState<FilterValues>({
     clientId: "",
@@ -54,6 +47,59 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
     moduleType: "",
     date: new Date(),
   });
+  const [moduleOptions, setModuleOptions] = useState<{ value: string; label: string }[]>([]);
+  const [isLoadingModules, setIsLoadingModules] = useState(false);
+
+  // Fetch modules when client ID changes (with debounce)
+  useEffect(() => {
+    const fetchModules = async () => {
+      if (!filters.clientId.trim()) {
+        setModuleOptions([]);
+        setFilters(prev => ({ ...prev, moduleType: "" }));
+        return;
+      }
+
+      setIsLoadingModules(true);
+      try {
+        const response = await fetch("http://4.213.179.58:8002/module/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ client_id: filters.clientId }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === "0" && Array.isArray(data.modules)) {
+            const options = data.modules.map((modulePath: string) => {
+              // Extract the last part of the module path
+              const parts = modulePath.split("/");
+              const lastPart = parts[parts.length - 1];
+              return {
+                value: modulePath,
+                label: lastPart,
+              };
+            });
+            setModuleOptions(options);
+          } else {
+            setModuleOptions([]);
+          }
+        } else {
+          setModuleOptions([]);
+        }
+      } catch (error) {
+        console.error("Error fetching modules:", error);
+        setModuleOptions([]);
+      } finally {
+        setIsLoadingModules(false);
+      }
+    };
+
+    // Debounce the API call
+    const timeoutId = setTimeout(fetchModules, 500);
+    return () => clearTimeout(timeoutId);
+  }, [filters.clientId]);
 
   const handleSearch = () => {
     onSearch(filters);
@@ -154,9 +200,17 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
           <Select
             value={filters.moduleType}
             onValueChange={(value) => setFilters({ ...filters, moduleType: value })}
+            disabled={isLoadingModules || moduleOptions.length === 0}
           >
             <SelectTrigger className="h-9 sm:h-10 text-sm">
-              <SelectValue placeholder="Select module" />
+              {isLoadingModules ? (
+                <div className="flex items-center">
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  <span>Loading...</span>
+                </div>
+              ) : (
+                <SelectValue placeholder={filters.clientId ? "Select module" : "Enter Client ID first"} />
+              )}
             </SelectTrigger>
             <SelectContent>
               {moduleOptions.map((option) => (
