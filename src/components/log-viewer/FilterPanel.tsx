@@ -19,6 +19,7 @@ import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FilterPanelProps {
   onSearch: (filters: FilterValues) => void;
@@ -61,30 +62,27 @@ export function FilterPanel({ onSearch }: FilterPanelProps) {
 
       setIsLoadingModules(true);
       try {
-        const response = await fetch("http://4.213.179.58:8002/module/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ client_id: filters.clientId }),
+        const { data, error } = await supabase.functions.invoke('get-modules', {
+          body: { client_id: filters.clientId },
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          if (data.status === "0" && Array.isArray(data.modules)) {
-            const options = data.modules.map((modulePath: string) => {
-              // Extract the last part of the module path
-              const parts = modulePath.split("/");
-              const lastPart = parts[parts.length - 1];
-              return {
-                value: modulePath,
-                label: lastPart,
-              };
-            });
-            setModuleOptions(options);
-          } else {
-            setModuleOptions([]);
-          }
+        if (error) {
+          console.error('Error fetching modules:', error);
+          setModuleOptions([]);
+          return;
+        }
+
+        if (data.status === "0" && Array.isArray(data.modules)) {
+          const options = data.modules.map((modulePath: string) => {
+            // Extract the last part of the module path
+            const parts = modulePath.split("/");
+            const lastPart = parts[parts.length - 1];
+            return {
+              value: modulePath,
+              label: lastPart,
+            };
+          });
+          setModuleOptions(options);
         } else {
           setModuleOptions([]);
         }
